@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Federant&family=Mozilla+Headline:wght@200..700&family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #222;
+      font-family: "Mozilla Headline", sans-serif;
+      color: #fff;
+    }
+
+    .game {
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .hands {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 20px 0;
+      font-size: 80px;
+    }
+
+    .hand-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .label {
+      font-size: 18px;
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+
+    .shake {
+      animation: shake 0.8s linear infinite;
+    }
+
+    @keyframes shake {
+      0%   { transform: translateY(0); }
+      25%  { transform: translateY(-20px); }
+      50%  { transform: translateY(0); }
+      75%  { transform: translateY(20px); }
+      100% { transform: translateY(0); }
+    }
+
+    .result {
+      font-size: 22px;
+      margin: 15px 0;
+      font-weight: bold;
+    }
+
+    button {
+      background: #444;
+      color: white;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: #666;
+    }
+
+    .scoreboard {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game">
+    <h1>Rock Paper Scissors</h1>
+
+    <div class="hands">
+      <div class="hand-container">
+        <div class="label">You</div>
+        <div id="playerHand" class="hand">✊🏻</div>
+      </div>
+
+      <div style="font-size: 28px; margin: 0 20px;">vs</div>
+
+      <div class="hand-container">
+        <div class="label">Computer</div>
+        <div id="computerHand" class="hand">✊🏻</div>
+      </div>
+    </div>
+
+    <div class="result" id="result">Make your move!</div>
+
+    <div>
+      <button onclick="play('rock')">✊🏻 Rock</button>
+      <button onclick="play('paper')">🤚🏻 Paper</button>
+      <button onclick="play('scissors')">✌🏻 Scissors</button>
+    </div>
+
+    <div class="scoreboard">
+      Won: <span id="won">0</span> | 
+      Lost: <span id="lost">0</span> | 
+      Draw: <span id="draw">0</span>
+    </div>
+  </div>
+
+  <script>
+    const playerHand = document.getElementById("playerHand");
+    const computerHand = document.getElementById("computerHand");
+    const resultText = document.getElementById("result");
+
+    const wonScore = document.getElementById("won");
+    const lostScore = document.getElementById("lost");
+    const drawScore = document.getElementById("draw");
+
+    let won = 0, lost = 0, draw = 0;
+
+    function play(playerChoice) {
+      const choices = ["rock", "paper", "scissors"];
+      const computerChoice = choices[Math.floor(Math.random() * 3)];
+
+      const handIcons = {
+        rock: "✊🏻",
+        paper: "🤚🏻",
+        scissors: "✌🏻"
+      };
+
+      // Reset hands to rock before animation
+      playerHand.textContent = "✊🏻";
+      computerHand.textContent = "✊🏻";
+
+      // Add shake animation
+      playerHand.classList.add("shake");
+      computerHand.classList.add("shake");
+
+      resultText.textContent = "Shaking... 🤜🏻🤛🏻";
+
+      // After shake, show result
+      setTimeout(() => {
+        playerHand.classList.remove("shake");
+        computerHand.classList.remove("shake");
+
+        playerHand.textContent = handIcons[playerChoice];
+        computerHand.textContent = handIcons[computerChoice];
+
+        if (playerChoice === computerChoice) {
+          resultText.textContent = "It's a Draw! 🙆🏻";
+          draw++;
+          drawScore.textContent = draw;
+        } else if (
+          (playerChoice === "rock" && computerChoice === "scissors") ||
+          (playerChoice === "paper" && computerChoice === "rock") ||
+          (playerChoice === "scissors" && computerChoice === "paper")
+        ) {
+          resultText.textContent = "Congrats, You Won! 🎉";
+          won++;
+          wonScore.textContent = won;
+        } else {
+          resultText.textContent = "Oops, You Lost! 😢";
+          lost++;
+          lostScore.textContent = lost;
+        }
+      }, 2000); // Shake for 2 seconds
+    }
+  </script>
+</body>
+</html>
